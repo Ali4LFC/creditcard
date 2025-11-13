@@ -1,0 +1,52 @@
+## General Criteria
+
+$ go build -o creditcard .  
+
+### Validate
+
+$ ./creditcard validate "4400430180300003"
+OK
+
+$ ./creditcard validate "4400430180300002"
+INCORRECT
+
+$ ./creditcard validate "4400430180300003" "4400430180300011"
+OK
+OK
+
+$ echo "4400430180300003" | ./creditcard validate --stdin
+OK
+
+$ echo "4400430180300003" "4400430180300011" | ./creditcard validate --stdin
+OK
+OK
+
+### Generate
+
+$ ./creditcard generate "440043018030****"
+4400430180300003
+4400430180300011
+4400430180300029
+...
+4400430180309988
+4400430180309996
+
+$ ./creditcard generate --pick "440043018030****"
+4400430180304385
+
+$ ./creditcard generate --pick "44004301803*****"
+$ echo $?
+1
+
+### Information
+
+$ ./creditcard information --brands=brands.txt --issuers=issuers.txt "4400430180300003"
+4400430180300003
+Correct: yes
+Card Brand: VISA
+Card Issuer: Kaspi Gold
+
+### Issue
+
+$ ./creditcard issue --brands=brands.txt --issuers=issuers.txt --brand=VISA --issuer="Kaspi Gold"
+4400430180300003
